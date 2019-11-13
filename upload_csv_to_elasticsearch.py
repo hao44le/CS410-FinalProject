@@ -16,8 +16,8 @@ es = Elasticsearch(
     verify_certs = True,
     connection_class = RequestsHttpConnection
 )
-
-csv_name = "K12_chinese_wechat_articles.csv"
+#K12_chinese_wechat_articles
+csv_name = "small_test.csv"
 
 def read_csv(): return pd.read_csv(csv_name)
 
