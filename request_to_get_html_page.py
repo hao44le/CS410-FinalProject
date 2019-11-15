@@ -13,6 +13,13 @@ def read_csv_tasks(csv_name = "small_test.csv"):
         links.append(document_link)
     return links
 
+def given_link_get_the_sn(document_link):
+    document_link_sn = document_link.find("sn") + 3
+    document_id_first_round = document_link[document_link_sn:]
+    document_id_stop = document_id_first_round.find("&")
+    document_id = document_id_first_round[:document_id_stop]
+    return document_id
+
 ''' More tidying
 Sometimes the text extracted HTML webpage may contain javascript code and some style elements.
 This function removes script and style tags from HTML so that extracted text does not contain them.
@@ -44,7 +51,7 @@ def get_content_div(soup):
     return img_content
 
 def given_url_fetch_content_and_parse(url):
-    soup = get_js_soup(task)
+    soup = get_js_soup(url)
     if not soup: return None
     html_content = get_content_div(soup)
     return html_content
