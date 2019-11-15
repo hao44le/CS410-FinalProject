@@ -23,3 +23,16 @@ def bulk_update(es, actions_array):
         print ("\nRESPONSE:", response)
     except Exception as e:
         print("\nERROR:", e)
+
+def given_link_get_the_sn(document_link):
+    document_link_sn = document_link.find("sn") + 3
+    document_id_first_round = document_link[document_link_sn:]
+    document_id_stop = document_id_first_round.find("&")
+    document_id = document_id_first_round[:document_id_stop]
+    return document_id
+
+def es_update_html_content(es, document_id, html_content, index="chinesek12_wechat_article"):
+    doc = es.get(index=index, id=document_id)['_source']
+    doc['文章内容'] = html_content
+    print(doc)
+    es.index(index=index, doc_type="doc",id=document_id,body=doc)

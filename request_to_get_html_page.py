@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from bs4 import BeautifulSoup
 import urllib.request
-from common import get_es_instance
+from common import get_es_instance, given_link_get_the_sn, es_update_html_content
 
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
@@ -12,13 +12,6 @@ def read_csv_tasks(csv_name = "small_test.csv"):
         document_link = json_array[str(x)]["链接"]
         links.append(document_link)
     return links
-
-def given_link_get_the_sn(document_link):
-    document_link_sn = document_link.find("sn") + 3
-    document_id_first_round = document_link[document_link_sn:]
-    document_id_stop = document_id_first_round.find("&")
-    document_id = document_id_first_round[:document_id_stop]
-    return document_id
 
 ''' More tidying
 Sometimes the text extracted HTML webpage may contain javascript code and some style elements.
@@ -57,9 +50,15 @@ def given_url_fetch_content_and_parse(url):
     return html_content
 
 if __name__ == '__main__':
-    tasks = read_csv_tasks()
+    csv_name = "K12_chinese_wechat_articles.csv"
+    tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
-    for task in tasks:
-        print(task)
+    for (x, task) in enumerate(tasks):
+        print("{}/{}".format(x, len(tasks)))
         html_content = given_url_fetch_content_and_parse(task)
-        print(html_content)
+        document_id = given_link_get_the_sn(task)
+        print(document_id)
+        es_update_html_content(es, document_id, html_content)
+        doc = es.get(index="chinesek12_wechat_article", id=document_id)
+        print(doc)
+        break

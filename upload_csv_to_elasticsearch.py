@@ -1,7 +1,6 @@
 import json
 from dateutil import parser
-from request_to_get_html_page import given_link_get_the_sn
-from common import get_es_instance, bulk_update
+from common import get_es_instance, bulk_update, given_link_get_the_sn
 import pandas as pd
 
 #K12_chinese_wechat_articles
