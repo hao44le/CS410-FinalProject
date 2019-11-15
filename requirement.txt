@@ -1,0 +1,5 @@
+bs4
+pandas
+elasticsearch
+requests_aws4auth
+dateutil

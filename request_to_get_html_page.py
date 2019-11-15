@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from bs4 import BeautifulSoup
 import urllib.request
-
+from common import get_es_instance
 
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
@@ -58,6 +58,7 @@ def given_url_fetch_content_and_parse(url):
 
 if __name__ == '__main__':
     tasks = read_csv_tasks()
+    es = get_es_instance()
     for task in tasks:
         print(task)
         html_content = given_url_fetch_content_and_parse(task)
