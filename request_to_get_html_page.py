@@ -62,3 +62,4 @@ if __name__ == '__main__':
     for task in tasks:
         print(task)
         html_content = given_url_fetch_content_and_parse(task)
+        print(html_content)
