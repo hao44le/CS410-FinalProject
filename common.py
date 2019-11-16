@@ -32,7 +32,8 @@ def given_link_get_the_sn(document_link):
     return document_id
 
 def es_update_html_content(es, document_id, html_content, index="chinesek12_wechat_article"):
-    doc = es.get(index=index, id=document_id)['_source']
-    doc['文章内容'] = html_content
-    print(doc)
-    es.index(index=index, doc_type="doc",id=document_id,body=doc)
+    # doc = es.get(index=index, id=document_id)['_source']
+    # doc['文章内容'] = html_content
+    # print(doc)
+    # es.index(index=index, doc_type="doc",id=document_id,body=doc)
+    es.update(index=index, doc_type="_doc", id=document_id, body={"doc": {'文章内容': html_content}})

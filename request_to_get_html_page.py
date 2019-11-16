@@ -53,12 +53,10 @@ if __name__ == '__main__':
     csv_name = "K12_chinese_wechat_articles.csv"
     tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
+    previous_cache = 1
     for (x, task) in enumerate(tasks):
+        if x < previous_cache: continue
         print("{}/{}".format(x, len(tasks)))
         html_content = given_url_fetch_content_and_parse(task)
         document_id = given_link_get_the_sn(task)
-        print(document_id)
         es_update_html_content(es, document_id, html_content)
-        doc = es.get(index="chinesek12_wechat_article", id=document_id)
-        print(doc)
-        break
