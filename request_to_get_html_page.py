@@ -3,6 +3,7 @@ import json
 from bs4 import BeautifulSoup
 import urllib.request
 from common import get_es_instance, given_link_get_the_sn, es_update_html_content
+import sys
 
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
@@ -38,9 +39,13 @@ def get_js_soup(url):
     return soup
 
 def get_content_div(soup):
-    img_content = soup.find("div", {"id": "img-content"}).text
-    img_content = img_content.replace("\n", "")
-    img_content = img_content.replace(" ", "")
+    img_content = ""
+    try:
+        img_content = soup.find("div", {"id": "img-content"}).text
+        img_content = img_content.replace("\n", "")
+        img_content = img_content.replace(" ", "")
+    except:
+        img_content = ""
     return img_content
 
 def given_url_fetch_content_and_parse(url):
@@ -53,10 +58,11 @@ if __name__ == '__main__':
     csv_name = "K12_chinese_wechat_articles.csv"
     tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
-    previous_cache = 1
+    previous_cache = int(sys.argv[1])
     for (x, task) in enumerate(tasks):
         if x < previous_cache: continue
-        print("{}/{}".format(x, len(tasks)))
+        print("start from {}.   {}/{}".format(previous_cache, x, len(tasks)))
         html_content = given_url_fetch_content_and_parse(task)
         document_id = given_link_get_the_sn(task)
+        print(document_id)
         es_update_html_content(es, document_id, html_content)
