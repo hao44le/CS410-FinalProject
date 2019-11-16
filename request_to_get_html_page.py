@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from common import get_es_instance, given_link_get_the_sn, es_update_html_content
 import sys
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
     json_array = json.loads(csv.to_json(orient='index'))
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
     options = Options()
-    options.add_argument('headless')
-    browser = webdriver.Chrome(options=options)
+    options.headless = True
+    browser = webdriver.Firefox(options=options)
 
     previous_cache = int(sys.argv[1])
     for (x, task) in enumerate(tasks):
