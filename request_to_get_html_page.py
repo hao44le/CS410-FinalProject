@@ -5,6 +5,7 @@ from common import get_es_instance, given_link_get_the_sn, es_update_html_conten
 import sys
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+import time
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
     json_array = json.loads(csv.to_json(orient='index'))
@@ -29,6 +30,7 @@ def get_js_soup(url, browser):
     try:
         # Use the browser, it is able to get the content without being blocked by their system
         browser.get(url)
+        time.sleep(0.5)
         res_html = browser.page_source
         soup = BeautifulSoup(res_html,'html.parser') #beautiful soup object to be used for parsing html content
         soup = remove_script(soup)
@@ -64,9 +66,17 @@ if __name__ == '__main__':
     previous_cache = int(sys.argv[1])
     for (x, task) in enumerate(tasks):
         if x < previous_cache: continue
-        print("start from {}.   {}/{}".format(previous_cache, x, len(tasks)))
+
         html_content = given_url_fetch_content_and_parse(task, browser)
-        print(html_content)
+        if html_content is None:
+            print("\tERROR! html_content is None!!!")
+            print("\tstart from {}.   {}/{}".format(previous_cache, x, len(tasks)))
+            continue
+        if len(html_content) == 0:
+            print("\tERROR! html_content is empty!!! {}".format(task))
+            print("\tstart from {}.   {}/{}".format(previous_cache, x, len(tasks)))
+            continue
+
         document_id = given_link_get_the_sn(task)
-        print(document_id)
+        print("start from {}.   {}/{}. Docuemnt length: {}. Document ID is {}".format(previous_cache, x, len(tasks), len(html_content), document_id))
         es_update_html_content(es, document_id, html_content)
