@@ -1,10 +1,10 @@
 import pandas as pd
 import json
 from bs4 import BeautifulSoup
-import urllib.request
 from common import get_es_instance, given_link_get_the_sn, es_update_html_content
 import sys
-
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
     json_array = json.loads(csv.to_json(orient='index'))
@@ -24,13 +24,12 @@ def remove_script(soup):
     return soup
 
 #uses webdriver object to execute javascript code and get dynamically loaded webcontent
-def get_js_soup(url):
+def get_js_soup(url, browser):
     soup = None
     try:
-        fp = urllib.request.urlopen(url)
-        mybytes = fp.read()
-        res_html = mybytes.decode("utf8")
-        fp.close()
+        # Use the browser, it is able to get the content without being blocked by their system
+        browser.get(url)
+        res_html = browser.page_source
         soup = BeautifulSoup(res_html,'html.parser') #beautiful soup object to be used for parsing html content
         soup = remove_script(soup)
     except:
@@ -48,8 +47,8 @@ def get_content_div(soup):
         img_content = ""
     return img_content
 
-def given_url_fetch_content_and_parse(url):
-    soup = get_js_soup(url)
+def given_url_fetch_content_and_parse(url, browser):
+    soup = get_js_soup(url, browser)
     if not soup: return None
     html_content = get_content_div(soup)
     return html_content
@@ -58,11 +57,16 @@ if __name__ == '__main__':
     csv_name = "K12_chinese_wechat_articles.csv"
     tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
+    options = Options()
+    options.add_argument('headless')
+    browser = webdriver.Chrome(options=options)
+
     previous_cache = int(sys.argv[1])
     for (x, task) in enumerate(tasks):
         if x < previous_cache: continue
         print("start from {}.   {}/{}".format(previous_cache, x, len(tasks)))
-        html_content = given_url_fetch_content_and_parse(task)
+        html_content = given_url_fetch_content_and_parse(task, browser)
+        print(html_content)
         document_id = given_link_get_the_sn(task)
         print(document_id)
         es_update_html_content(es, document_id, html_content)

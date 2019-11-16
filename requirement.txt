@@ -4,3 +4,4 @@ elasticsearch
 requests_aws4auth
 python-dateutil
 boto3
+selenium
