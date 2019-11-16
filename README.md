@@ -2,19 +2,18 @@
 
 # Data preparation
 
-## 1. Large amounts of Metadata
+## 1. Crawl large amounts of Metadata on xigua.com
 
-## 2. HTML content crawling
+## 2. HTML content crawling on weixin.qq.com
 
 ### 2.1. selenium crawler
 
 ### 2.2. firefox
 
-
 ## 3. Amazon Elasticsearch service engine setup
 
-## 4. Amazon es service data populate
+### 3.1. Amazon es service data populate
 
-## 5. Dejavu debugging
+### 3.2. Dejavu debugging
 
 # Frontend rendering
