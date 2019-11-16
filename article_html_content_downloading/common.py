@@ -38,8 +38,11 @@ def es_update_html_content(es, document_id, html_content, index="chinesek12_wech
     # doc['文章内容'] = html_content
     # print(doc)
     # es.index(index=index, doc_type="doc",id=document_id,body=doc)
-    es.update(index=index, doc_type="_doc", id=document_id, body={"doc": {'文章内容': html_content}})
-
+    try:
+        es.update(index=index, doc_type="_doc", id=document_id, body={"doc": {'文章内容': html_content}})
+        return True
+    except:
+        return False
 if __name__ == '__main__':
     es = get_es_instance()
     print(es)

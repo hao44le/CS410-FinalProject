@@ -64,6 +64,8 @@ if __name__ == '__main__':
     browser = webdriver.Firefox(options=options)
 
     previous_cache = int(sys.argv[1])
+    retry_max_count = 10
+    
     for (x, task) in enumerate(tasks):
         if x < previous_cache: continue
 
@@ -79,4 +81,9 @@ if __name__ == '__main__':
 
         document_id = given_link_get_the_sn(task)
         print("start from {}.   {}/{}. Docuemnt length: {}. Document ID is {}".format(previous_cache, x, len(tasks), len(html_content), document_id))
-        es_update_html_content(es, document_id, html_content)
+
+        curr_retry = 0
+        while curr_retry < retry_max_count:
+            if es_update_html_content(es, document_id, html_content): break
+            curr_retry += 1
+            print("\t\tfailed to update on es. curr retry {} with max of {}".format(curr_retry, retry_max_count))
