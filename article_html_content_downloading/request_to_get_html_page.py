@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from common import get_es_instance, given_link_get_the_sn, es_update_html_content
 import sys
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 import time
 def read_csv_tasks(csv_name = "small_test.csv"):
     csv = pd.read_csv(csv_name)
@@ -30,7 +30,6 @@ def get_js_soup(url, browser):
     try:
         # Use the browser, it is able to get the content without being blocked by their system
         browser.get(url)
-        time.sleep(0.5)
         res_html = browser.page_source
         soup = BeautifulSoup(res_html,'html.parser') #beautiful soup object to be used for parsing html content
         soup = remove_script(soup)
@@ -60,12 +59,12 @@ if __name__ == '__main__':
     tasks = read_csv_tasks(csv_name)
     es = get_es_instance()
     options = Options()
-    options.headless = True
-    browser = webdriver.Firefox(options=options)
+    # options.headless = True
+    browser = webdriver.Chrome(options=options)
 
     previous_cache = int(sys.argv[1])
     retry_max_count = 10
-    
+
     for (x, task) in enumerate(tasks):
         if x < previous_cache: continue
 

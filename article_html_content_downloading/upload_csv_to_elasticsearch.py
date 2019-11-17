@@ -36,10 +36,13 @@ def read_csv_and_write_to_es(es, index):
 if __name__ == '__main__':
     index = "chinesek12_wechat_article"
 
-    # es = get_es_instance()
+    es = get_es_instance()
     # read_csv_and_write_to_es(es, index)
 
     # es.indices.delete(index=index, ignore=[400, 404])
 
     # res = es.search(index=index, body = {'size' : 10,'query': {'match_all' : {}}})
-    # print(res)
+    res = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}})
+    print(res)
+    res2 = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}}, size=10000, scroll="1m")
+    print(res2)
