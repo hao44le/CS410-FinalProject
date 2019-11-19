@@ -14,7 +14,7 @@ class App extends Component {
     return (
       <ReactiveBase
         app="carstore-dataset"
-        credentials="4HWI27QmA:58c731f7-79ab-4f55-a590-7e15c7e36721"
+        url="https://search-chinesek12-sp2avv7lleofzv5qu5m6qkk4by.us-east-2.es.amazonaws.com/"
       >
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div
