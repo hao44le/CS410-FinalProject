@@ -22,7 +22,7 @@ class App extends Component {
           >
             <CategorySearch
               componentId="searchbox"
-              dataField="name"
+              dataField={['brand', 'model']}
               categoryField="brand.raw"
               placeholder="Search for cars"
               style={{
