@@ -1,5 +1,10 @@
 # K12_chinese_wechat_articles
 
+<ReactiveBase
+  app="carstore-dataset"
+  url="https://search-chinesek12-sp2avv7lleofzv5qu5m6qkk4by.us-east-2.es.amazonaws.com/"
+>
+
 # Data preparation
 
 ## 1. Crawl large amounts of Metadata on xigua.com
