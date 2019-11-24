@@ -10,6 +10,8 @@ import Components from "views/Components/Components.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
 import ProfilePage from "views/ProfilePage/ProfilePage.js";
 import LoginPage from "views/LoginPage/LoginPage.js";
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
 var hist = createBrowserHistory();
 
@@ -24,3 +26,8 @@ ReactDOM.render(
   </Router>,
   document.getElementById("root")
 );
+
+
+
+ReactDOM.render(<App />, document.getElementById('search'));
+registerServiceWorker();
