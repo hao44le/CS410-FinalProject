@@ -8,7 +8,7 @@ csv_name = "K12_chinese_wechat_articles.csv"
 previous_cache = 0
 
 def read_csv_and_write_to_es(es, index):
-    csv = pd.read_csv(csv_name)
+    csv = pd.read_csv(csv_name, encoding = "gbk")
     json_array = json.loads(csv.to_json(orient='index'))
     actions_array = []
 
@@ -17,12 +17,12 @@ def read_csv_and_write_to_es(es, index):
         print("{}/{}".format(x, len(json_array)))
         document = json_array[str(x)]
         try:
-            document["发布时间"] = parser.parse(document["发布时间"])
+            document["publish_time"] = parser.parse(document["publish_time"])
         except:
             continue
 
         # Use sn as the unique article id
-        document_link = document["链接"]
+        document_link = document["link"]
         document_id = given_link_get_the_sn(document_link)
         if len(document_id) != 32: continue
 
@@ -35,14 +35,14 @@ def read_csv_and_write_to_es(es, index):
 
 if __name__ == '__main__':
     index = "chinesek12_wechat_article"
-
+    print(1)
     es = get_es_instance()
-    # read_csv_and_write_to_es(es, index)
-
+    read_csv_and_write_to_es(es, index)
+    print(2)
     # es.indices.delete(index=index, ignore=[400, 404])
 
     # res = es.search(index=index, body = {'size' : 10,'query': {'match_all' : {}}})
-    res = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}})
-    print(res)
-    res2 = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}}, size=10000, scroll="1m")
-    print(res2)
+    # res = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}})
+    # print(res)
+    # res2 = es.search(index = index, body = {"query": {"regexp" : {"文章内容" : ".+"}}}, size=10000, scroll="1m")
+    # print(res2)
