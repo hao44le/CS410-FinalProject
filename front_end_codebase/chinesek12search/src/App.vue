@@ -5,7 +5,7 @@
       credentials="gBgUqs2tV:3456f3bf-ea9e-4ebc-9c93-08eb13e5c87c"
     >
       <div class="navbar">
-        <h2><span class="logo">Bs</span>BookSearch</h2>
+        <h2><span class="logo">Chinese K12 Wechat Article</span>Search</h2>
         <DataSearch
           componentId="title"
           iconPosition="right"
@@ -19,14 +19,14 @@
           ]"
           className="data-search"
           :showClear="false"
-          placeholder="Search for book"
+          placeholder="Search for Chinese K12 Wechat Articles"
         />
       </div>
       <button class="toggle" @click="switchContainer">
-        {{ showBooks ? "Show Filters 💣" : "Show Books 📚" }}
+        {{ showArticles ? "Show Filters 💣" : "Show Articles 📚" }}
       </button>
       <div class="container">
-        <div class="filters-container" :class="{ full: !showBooks }">
+        <div class="filters-container" :class="{ full: !showArticles }">
           <MultiList
             componentId="Authors"
             dataField="authors.raw"
@@ -51,7 +51,7 @@
         <ReactiveList
           componentId="SearchResult"
           dataField="original_title.raw"
-          :class="{ full: showBooks }"
+          :class="{ full: showArticles }"
           :pagination="true"
           :from="0"
           :size="8"
@@ -92,12 +92,12 @@ export default {
   name: "app",
   data: function() {
     return {
-      showBooks: window.innerWidth <= 768 ? true : false
+      showArticles: window.innerWidth <= 768 ? true : false
     };
   },
   methods: {
     switchContainer: function() {
-      return (this.showBooks = !this.showBooks);
+      return (this.showArticles = !this.showArticles);
     }
   }
 };
