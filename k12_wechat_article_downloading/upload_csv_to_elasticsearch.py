@@ -8,7 +8,7 @@ csv_name = "K12_chinese_wechat_articles.csv"
 previous_cache = 0
 
 def read_csv_and_write_to_es(es, index):
-    csv = pd.read_csv(csv_name, encoding = "gbk")
+    csv = pd.read_csv(csv_name)
     json_array = json.loads(csv.to_json(orient='index'))
     actions_array = []
 
