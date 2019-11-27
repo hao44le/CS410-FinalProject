@@ -34,7 +34,7 @@ class App extends Component {
       >
         <div className="navbar">
           <div className="logo">
-            Good<b>Books</b>
+            Chinese K12<b> Wechat Article </b>Search Engine
           </div>
           <DataSearch
             className="datasearch"
@@ -46,7 +46,7 @@ class App extends Component {
               'authors.search',
             ]}
             queryFormat="and"
-            placeholder="Search for a book title or an author"
+            placeholder="Search for a article title or wechat account name"
             innerClass={{
               input: 'searchbox',
               list: 'suggestionlist',
