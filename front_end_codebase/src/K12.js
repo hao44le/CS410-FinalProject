@@ -29,8 +29,8 @@ class K12 extends Component {
   render() {
     return (
       <ReactiveBase
-        app="good-books-ds"
-        credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d"
+        app="chinesek12_wechat_article"
+        url="https://search-chinesek12-sp2avv7lleofzv5qu5m6qkk4by.us-east-2.es.amazonaws.com/"
       >
         <div className="navbar">
           <div className="logo">
@@ -40,10 +40,12 @@ class K12 extends Component {
             className="datasearch"
             componentId="mainSearch"
             dataField={[
-              'original_title',
-              'original_title.search',
-              'authors',
-              'authors.search',
+              'title',
+              'title.search',
+              'title.autosuggest',
+              'wechat_name',
+              'wechat_name.search',
+              'wechat_name.autosuggest'
             ]}
             queryFormat="and"
             placeholder="Search for a article title or wechat account name"
@@ -58,115 +60,51 @@ class K12 extends Component {
         </div>
         <div className="display">
           <div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>
-            <SingleRange
-              componentId="ratingsFilter"
-              dataField="average_rating_rounded"
-              title="Book Ratings"
-              data={[
-                {
-                  start: 4,
-                  end: 5,
-                  label: '★★★★ & up',
-                },
-                {
-                  start: 3,
-                  end: 5,
-                  label: '★★★ & up',
-                },
-                {
-                  start: 2,
-                  end: 5,
-                  label: '★★ & up',
-                },
-                {
-                  start: 1,
-                  end: 5,
-                  label: '★ & up',
-                },
-              ]}
-              react={{
-                and: 'mainSearch',
-              }}
-              filterLabel="Ratings"
-            />
-            <RangeSlider
-              componentId="publishFilter"
-              dataField="original_publication_year"
-              title="Year of Publication"
-              filterLabel="published"
-              range={{
-                start: 1970,
-                end: 2017,
-              }}
-              rangeLabels={{
-                start: '1970',
-                end: '2017',
-              }}
-              interval={2}
-            />
-            <MultiList
-              componentId="authorFilter"
-              dataField="authors.raw"
-              title="Authors"
-              size={100}
-              showCheckbox={false}
-              className="authors"
-              innerClass={{
-                list: 'author-list',
-              }}
-              placeholder="Filter by author name"
-              filterLabel="Authors"
-            />
           </div>
           <div className="mainBar">
             <SelectedFilters />
             <ReactiveList
               componentId="results"
-              dataField="original_title"
+              dataField="title"
               react={{
                 and: [
                   'mainSearch',
-                  'ratingsFilter',
-                  'publishFilter',
-                  'authorFilter',
+                  'wechatTypeFilter',
+                  // 'publishFilter',
+                  // 'authorFilter',
                 ],
               }}
               pagination
               size={12}
               sortOptions={[
                 {
-                  dataField: 'average_rating',
+                  dataField: 'reads',
                   sortBy: 'desc',
-                  label: 'Ratings (High to low)',
+                  label: 'Reads (High to low)',
                 },
                 {
-                  dataField: 'original_title.raw',
-                  sortBy: 'asc',
-                  label: 'Title A->Z',
-                },
-                {
-                  dataField: 'original_title.raw',
+                  dataField: 'publish_time',
                   sortBy: 'desc',
-                  label: 'Title Z->A',
+                  label: 'Publish Time (Recent to Remote)',
                 },
               ]}
               render={({ data }) => (
                 <ReactiveList.ResultCardsWrapper>
                   {data.map(item => (
-                    <ResultCard href={item.original_title} key={item._id}>
-                      <ResultCard.Image src={item.image} />
-                      <ResultCard.Title>
-                        {item.original_title || ' '}
-                      </ResultCard.Title>
+                    <ResultCard href={item.link} key={item._id}>
                       <ResultCard.Description
                         dangerouslySetInnerHTML={{
                           __html:
+                            `<h2><div class='result-title'>${item.title}</div></h2>` +
                             `<div class='result-author' title='${
-                              item.authors
-                            }'>by ${item.authors}</div>`
-                            + `<span class="star">${'★'.repeat(
-                              item.average_rating_rounded,
-                            )}</span>`,
+                              item.wechat_name
+                            }'>Created by <span class="star">${item.wechat_name}</span></div>`
+                            + `<div>Wechat ID: <span class="star">${item.wechat_ID}</span></div>`
+                            + `<div>Publish Time: <span class="star">${(new Date(Date.parse(item.publish_time))).toDateString()}</span></div>`
+                            + `<div>Publish Location: <span class="star">${item.location}</span></div>`
+                            + `<div>Reads: <span class="star">${item.reads}</span></div>`
+                            + `<div>Likes: <span class="star">${item.likes}</span></div>`
+                            + `<div>Comments: <span class="star">${item.comments}</span></div>`,
                         }}
                       />
                     </ResultCard>
@@ -176,8 +114,6 @@ class K12 extends Component {
               className="result-data"
               innerClass={{
                 title: 'result-title',
-                image: 'result-image',
-                resultStats: 'result-stats',
                 listItem: 'result-item',
               }}
             />
@@ -189,7 +125,7 @@ class K12 extends Component {
             onClick={this.toggleState}
             className={`toggle-btn ${this.state.visible ? 'active' : ''}`}
           >
-            {this.state.visible ? '📚  Show Books' : '📂  Show Filters'}
+            {this.state.visible ? '📚  Show Articles' : '📂  Show Filters'}
           </div>
         </div>
       </ReactiveBase>
