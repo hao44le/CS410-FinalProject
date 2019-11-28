@@ -69,7 +69,7 @@ class K12 extends Component {
               react={{
                 and: [
                   'mainSearch',
-                  'wechatTypeFilter',
+                  // 'wechatTypeFilter',
                   // 'publishFilter',
                   // 'authorFilter',
                 ],
