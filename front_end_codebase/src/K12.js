@@ -3,8 +3,7 @@ import {
   ReactiveBase,
   DataSearch,
   MultiList,
-  RangeSlider,
-  SingleRange,
+  DateRange,
   SelectedFilters,
   ResultCard,
   ReactiveList,
@@ -34,7 +33,7 @@ class K12 extends Component {
       >
         <div className="navbar">
           <div className="logo">
-            Chinese K12<b> Wechat Article </b>Search Engine
+            Chinese K12 EDU<b> Wechat Article </b>Search Engine
           </div>
           <DataSearch
             className="datasearch"
@@ -60,6 +59,23 @@ class K12 extends Component {
         </div>
         <div className="display">
           <div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>
+          <h1>Filters</h1>
+          <MultiList
+          componentId="wechatTypeFilter"
+          dataField="wechat_type.keyword"
+          placeholder="Filter by wechat account type"
+          filterLabel="Wechat account type"
+          title="Wechat Account Types Filter"
+          />
+          <DateRange
+          componentId="publishFilter"
+          dataField="publish_time"
+          title="Article Publish Time Filter"
+          defaultValue={{
+            start: new Date('2017-04-01'),
+            end: new Date('2019-11-29')
+          }}
+          />
           </div>
           <div className="mainBar">
             <SelectedFilters />
@@ -69,13 +85,12 @@ class K12 extends Component {
               react={{
                 and: [
                   'mainSearch',
-                  // 'wechatTypeFilter',
-                  // 'publishFilter',
-                  // 'authorFilter',
+                  'wechatTypeFilter',
+                  'publishFilter',
                 ],
               }}
               pagination
-              size={12}
+              size={25}
               sortOptions={[
                 {
                   dataField: 'reads',
@@ -100,6 +115,7 @@ class K12 extends Component {
                               item.wechat_name
                             }'>Created by <span class="star">${item.wechat_name}</span></div>`
                             + `<div>Wechat ID: <span class="star">${item.wechat_ID}</span></div>`
+                            + `<div>Wechat Account Type: <span class="star">${item.wechat_type}</span></div>`
                             + `<div>Publish Time: <span class="star">${(new Date(Date.parse(item.publish_time))).toDateString()}</span></div>`
                             + `<div>Publish Location: <span class="star">${item.location}</span></div>`
                             + `<div>Reads: <span class="star">${item.reads}</span></div>`
