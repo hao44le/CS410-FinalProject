@@ -1,6 +1,8 @@
 # K12_chinese_wechat_articles
 
-# Data preparation
+# Data crawling
+
+![pic](slides/multiple_crawler_for_html_content.png)
 
 ## 1. Crawl large amounts of Metadata on xigua.com
 
@@ -8,7 +10,7 @@
 
 ### 2.1. selenium crawler
 
-### 2.2. firefox
+### 2.2. chrome
 
 ## 3. Amazon Elasticsearch service engine setup
 
@@ -17,6 +19,8 @@
 ### 3.2. Dejavu debugging
 
 # Frontend rendering
+
+![pic](slides/frontend_ui_page.png)
 
 ## 4. ReactiveSearch UI Component
 
